@@ -1,30 +1,31 @@
 pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'g++ -o PES1UG20CS492-1 pes1ug20cs492.cpp'
-                echo 'build stage successful'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh './PES1UG20CS492-1'
-                echo 'test stage successful'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'echo "Deploying "'
-                echo 'deployment successful'
-            }
-        }
+agent any
+stages {
+ stage ('Clone reposiory'){
+ steps{
+  git branch : 'main',
+  url : 'https://github.com/garagveena/PES1UG20CS492_jenkins.git'
+}
+ }
+
+
+
+stage( 'Build application') {
+steps {
+sh 'g++ pes1ug20cs492.cpp'
+}
+}
+stage( 'Test application') {
+steps{
+sh './a.out'
+sh 'failure ' 
+}
+}
+
+}
+post {
+    failure {
+         echo "pipeline failed "
     }
-    post {
-        failure {
-          echo 'pipeline failed'
-                }
-            
-        
-    }
+}
 }
